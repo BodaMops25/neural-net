@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/2103/2103658.png" type="image/x-icon">
+	<title>Neural-Net</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			width: 100vw;
+			height: 100vh;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		canvas {
+			border: 1px solid #000;
+		}
+	</style>
+</head>
+<body>
+	
+	<canvas id="game"></canvas>
+
+	<script>
+		'use strict'
+
+		function getNode(node) {
+			return document.querySelector(node)
+		}
+
+		const game = getNode('#game'),
+			  gctx = game.getContext('2d'),
+			  cSz = 500
+
+		game.width = cSz
+		game.height = cSz
+		
+		game.style.width = cSz + 'px'
+		game.style.height = cSz + 'px'
+
+		// GAME FIELD
+
+		const field = [], resolution = 20, cellPadding = 2,
+
+		types = {
+			null: 0,
+			empty: 1,
+			wall: 2,
+		}
+
+		for(let i = 0; i < resolution; i++) {
+
+			field[i] = []
+
+			for(let j = 0; j < resolution; j++) {
+				field[i][j] = types.empty
+			}
+		}
+
+		// CREATING MAP TOOL
+
+		function createWall(e) {
+
+			if(!e.ctrlKey) {
+
+				function mouseClick(mX, mY) {
+					const [eX, eY] = [mX, mY],
+						x = parseInt(eX / (cSz / resolution)),
+						y = parseInt(eY / (cSz / resolution))
+
+					field[x][y] = types.wall
+				}
+
+				mouseClick(e.offsetX, e.offsetY)
+
+				function f1(e) {
+
+					mouseClick(e.offsetX, e.offsetY)
+				}
+
+				game.addEventListener('mousemove', f1)
+				game.addEventListener('mouseup', () => {
+					game.removeEventListener('mousemove', f1)
+				})
+			}
+
+			else if(e.ctrlKey) {
+				
+				function mouseClick(mX, mY) {
+					const [eX, eY] = [mX, mY],
+						x = parseInt(eX / (cSz / resolution)),
+						y = parseInt(eY / (cSz / resolution))
+
+					field[x][y] = types.empty
+				}
+
+				mouseClick(e.offsetX, e.offsetY)
+
+				function f1(e) {
+
+					mouseClick(e.offsetX, e.offsetY)
+				}
+
+				game.addEventListener('mousemove', f1)
+				game.addEventListener('mouseup', () => {
+					game.removeEventListener('mousemove', f1)
+				})
+			}
+		}
+
+		game.addEventListener('mousedown', createWall)
+
+		// FUNCTIONS
+
+		function displaySomething(x, y, type) {
+			const sz = cSz / resolution - cellPadding * (1 + 1/resolution),
+				  cX = (sz + cellPadding) * x + cellPadding,
+				  cY = (sz + cellPadding) * y + cellPadding
+
+			gctx.beginPath()
+			gctx.rect(cX, cY, sz, sz)
+
+			switch (type) {
+				case types.wall:
+					gctx.fillStyle = '#000'
+					break;
+				case types.empty:
+					gctx.fillStyle = '#e4e4e4'
+					break;
+			}
+
+			gctx.fill()
+		}
+
+		function displayField() {
+
+			for(let i = 0; i < resolution; i++) {
+				for(let j = 0; j < resolution; j++) {
+
+					displaySomething(i, j, field[i][j])
+				}
+			}
+		}
+
+		// RENDER
+
+		const fps = 60,
+		getUpdate = setInterval(() => {
+			 
+			requestAnimationFrame(() => {
+
+				gctx.clearRect(0, 0, cSz, cSz)
+
+
+				
+				displayField()
+			})
+		}, 1000 / 60)
+		
+		document.addEventListener('keydown', (e) => {
+			if(e.keyCode === 77) {
+				let fieldStr = ''
+				
+				for(let i = 0; i < field.length; i++) {
+					fieldStr += `[${field[i].toString()}],\n`
+				}
+
+				console.log(fieldStr)
+			}
+		})
+		
+	</script>
+</body>
+</html>
