@@ -1,40 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/2103/2103658.png" type="image/x-icon">
-	<title>Neural-Net</title>
-	<style>
-		body {
-			margin: 0;
-			padding: 0;
-			width: 100vw;
-			height: 100vh;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/2103/2103658.png" type="image/x-icon">
+  <title>Neural-Net</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-		canvas {
-			border: 1px solid #000;
-		}
+    canvas {
+      border: 1px solid #000;
+    }
 
-		p#food {
-			position: absolute;
-			top: -10px;
-		}
-	</style>
+    p#food {
+      position: absolute;
+      top: -10px;
+    }
+  </style>
 </head>
 <body>
-	
-	<canvas id="game"></canvas>
-	<p id="food">Food: <span>0</span></p>
+  
+  <canvas id="game"></canvas>
+  <p id="food">Food: <span>0</span></p>
 
-	<script src="game.js"></script>
-	<script src="foodGen.js"></script>
-	<script src="neuralNet.js"></script>
-	<script src="render.js"></script>
+  <script>
+
+    const game = document.querySelector('#game'),
+          gctx = game.getContext('2d'),
+          cSz = 500
+
+    game.width = cSz
+    game.height = cSz
+
+    game.style.width = cSz + 'px'
+    game.style.height = cSz + 'px'
+  </script>
+
+  <script src="newNewGame.js"></script>
+  <!-- <script src="foodGen.js"></script>
+  <script src="neuralNet.js"></script>
+  <script src="render.js"></script> -->
 </body>
 </html>
